@@ -1,0 +1,7 @@
+/home/slxy/zca/code/drivetransformer_private/carla/CarlaUE4.sh -RenderOffScreen -nosound -carla-rpc-port=30150 -graphicsadapter=1 None
+4.26.2-0+++UE4+Release-4.26 522 0
+Disabling core dumps.
+CommonUnixCrashHandler: Signal=11
+Engine crash handling finiload_world failed , attempts=1
+time-out of 600000ms while waitload_world failed , attempts=0
+time-out of 600000ms while waiting for the simulator, make sure the simulator is ready and connected to localhost:30150

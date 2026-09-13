@@ -1,0 +1,54 @@
+/home/slxy/zca/code/drivetransformer_private/carla/CarlaUE4.sh -RenderOffScreen -nosound -carla-rpc-port=30001 -graphicsadapter=3 None
+load_world success , attempts=0
+traffic_manager init success, try_time=0
+Problem reading checkpoint. Found no data
+
+[1m========= Preparing RouteScenario_1711 (repetition 0) =========[0m
+[1m> Loading the world[0m
+[1m> Setting up the agent[0m
+
+[91mCould not set up the required agent:
+
+Traceback (most recent call last):
+  File "leaderboard/leaderboard/leaderboard_evaluator.py", line 364, in _load_and_run_scenario
+    self.agent_instance.setup(args.agent_config)
+  File "/home/slxy/zca/code/Bench2Drive/leaderboard/team_code/drivetransformer_b2d_agent.py", line 56, in setup
+    cfg = Config.fromfile(self.config_path)
+  File "/home/slxy/zca/code/drivetransformer_private/mmcv/utils/config.py", line 331, in fromfile
+    cfg_dict, cfg_text = Config._file2dict(filename,
+  File "/home/slxy/zca/code/drivetransformer_private/mmcv/utils/config.py", line 182, in _file2dict
+    check_file_exist(filename)
+  File "/home/slxy/zca/code/drivetransformer_private/mmcv/utils/path.py", line 24, in check_file_exist
+    raise FileNotFoundError(msg_tmpl.format(filename))
+FileNotFoundError: file "/home/slxy/zca/code/Bench2Drive/your_team_agent_ckpt.pth" does not exist
+[0m
+file "/home/slxy/zca/code/Bench2Drive/your_team_agent_ckpt.pth" does not exist[0m
+
+[1m> Registering the route statistics[0m
+
+[91mFailed to stop the agent:
+
+Traceback (most recent call last):
+  File "leaderboard/leaderboard/leaderboard_evaluator.py", line 364, in _load_and_run_scenario
+    self.agent_instance.setup(args.agent_config)
+  File "/home/slxy/zca/code/Bench2Drive/leaderboard/team_code/drivetransformer_b2d_agent.py", line 56, in setup
+    cfg = Config.fromfile(self.config_path)
+  File "/home/slxy/zca/code/drivetransformer_private/mmcv/utils/config.py", line 331, in fromfile
+    cfg_dict, cfg_text = Config._file2dict(filename,
+  File "/home/slxy/zca/code/drivetransformer_private/mmcv/utils/config.py", line 182, in _file2dict
+    check_file_exist(filename)
+  File "/home/slxy/zca/code/drivetransformer_private/mmcv/utils/path.py", line 24, in check_file_exist
+    raise FileNotFoundError(msg_tmpl.format(filename))
+FileNotFoundError: file "/home/slxy/zca/code/Bench2Drive/your_team_agent_ckpt.pth" does not exist
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "leaderboard/leaderboard/leaderboard_evaluator.py", line 175, in _cleanup
+    self.agent_instance.destroy()
+  File "/home/slxy/zca/code/Bench2Drive/leaderboard/team_code/drivetransformer_b2d_agent.py", line 566, in destroy
+    del self.model
+AttributeError: model
+[0m
+True
+1 crash, [1/220], please restart

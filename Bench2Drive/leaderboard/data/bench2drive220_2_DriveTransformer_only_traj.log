@@ -1,0 +1,3 @@
+/home/slxy/zca/code/drivetransformer_private/carla/CarlaUE4.sh -RenderOffScreen -nosound -carla-rpc-port=30300 -graphicsadapter=2 None
+load_world success , attempts=0
+traffic_manager init success, try_time=0
