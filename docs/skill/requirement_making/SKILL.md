@@ -1,6 +1,9 @@
 把课程作业说明整理成本工程的 lab 说明文档。
 
-源：`/home/ubuntu/Projects/end_to_end_driving/report/chapterN_homework/requirement/`
+源：`/home/ubuntu/Projects/end_to_end_driving/report/chapterN_homework/` 或其 `requirement/` 子目录下，以 `requirement.md` 实际位置为准（chapter2 在子目录里，chapter3 直接在 chapter 目录下）。
+
+章节与 lab 的对应不是顺序的，按内容核对：lab1=chapter2（Project1 动态 OD 感知）、lab2=chapter3（Project2 静态建图）、lab3=chapter4（Project3 Planner）、lab4=chapter8（Project4 训练与闭环）。
+
 目标：`docs/requirement/labN.md`，图片放 `docs/requirement/assets/labN/`
 
 ## 原则：以复制为主
