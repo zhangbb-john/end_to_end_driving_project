@@ -23,13 +23,13 @@
 
 分支按实验顺序递进。`main` 是预留好填空点的基准工程，每个实验只改少量文件，后一个实验建立在前一个的结果之上，因此既可以顺着做下来，也可以直接切到任一 solution 分支看完整实现。
 
-| 分支 | 内容 |
-| --- | --- |
-| `main` | 初始基准工程，预留全部 TODO 填空点，动手做的起点 |
-| `lab1-solution` | main + Lab1 参考实现 + lab 报告（开环感知可视化） |
-| `lab2-solution` | 基于 lab1-solution，加入在线建图，产出带地图的可视化 |
-| `lab3-solution` | 基于 lab2-solution，加入 planner，产出闭环评测结果与可视化 |
-| `lab4-solution` | 基于 lab3-solution，自行训练权重并跑完整评测集，产出训练日志与评测分析 |
+| 分支 | 内容 | lab 说明 |
+| --- | --- | --- |
+| [`main`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/main) | 初始基准工程，预留全部 TODO 填空点，动手做的起点 | — |
+| [`lab1-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab1-solution) | main + Lab1 参考实现 + lab 报告（开环感知可视化） | [lab1](docs/requirement/lab1.md) |
+| [`lab2-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab2-solution) | 基于 lab1-solution，加入在线建图，产出带地图的可视化 | [lab2](docs/requirement/lab2.md) |
+| [`lab3-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab3-solution) | 基于 lab2-solution，加入 planner，产出闭环评测结果与可视化 | [lab3](docs/requirement/lab3.md) |
+| [`lab4-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab4-solution) | 基于 lab3-solution，自行训练权重并跑完整评测集，产出训练日志与评测分析 | [lab4](docs/requirement/lab4.md) |
 
 ### 实验安排
 
@@ -46,7 +46,7 @@ TODO-6（注意力掩码）前三个实验都要动：每个实验在前一个�
 
 Lab1~Lab3 用的是官方预训练权重，只验证推理链路是否正确；Lab4 才真正自己训练，因此对算力和时间的要求高得多（完整训练需多卡、耗时以天计），也是唯一需要下载 Bench2Drive 数据集的实验。
 
-各 lab 的说明与产出物要求见 [docs/requirement/lab1.md](docs/requirement/lab1.md)。文档为课程原始要求的完整副本，其中的打包提交说明仅在教学场景下适用，自学或验证时跳过即可。
+各 lab 的说明见上表「lab 说明」一列。文档为课程原始要求的完整副本，其中的打包提交说明仅在教学场景下适用，自学或验证时跳过即可。
 
 ### 目录结构
 
