@@ -289,13 +289,12 @@ class DriveTransformerlHead(BaseModule):
         # self.agent_query shape:[self.agent_num_query, self.embed_dims]
         # self.agent_reference_points shape:[self.agent_num_query, 3]
 
-        # 替换此处代码
-        self.agent_query = torch.randn(self.agent_num_query, self.embed_dims).to("cuda")
-        self.agent_reference_points = torch.randn(self.agent_num_query, 3).to("cuda")
+        self.agent_query = nn.Embedding(self.agent_num_query, self.embed_dims)
+        self.agent_reference_points = nn.Embedding(self.agent_num_query, 3)
 
         ###################################################################
-        self.agent_reference_points.requires_grad_(False)
-        self.agent_query.requires_grad_(False)
+        self.agent_reference_points.requires_grad_(True)
+        self.agent_query.requires_grad_(True)
         
         self.agent_cls_embedding = nn.Sequential(
             nn.Linear(self.num_classes, self.embed_dims),
@@ -518,22 +517,22 @@ class DriveTransformerlHead(BaseModule):
         self.ego_lcf_encoder.apply(self.xavier_uniform_linear)
         self.img_position_encoder.apply(self.xavier_uniform_linear)
         self.apply(self.init_ln)
-        num_grid_per_dim_agent = int(np.sqrt(self.agent_reference_points.weight.shape[0]))
         ###################################################################
         # project-1
-        # TODO-2 
-        # init agent reference points
-        # x: pc_range[0], pc_range[3], step=num_grid_per_dim_agent
-        # y: pc_range[1], pc_range[4], step=num_grid_per_dim_agent
-        # index="xy"
-        # x, y = meshgrid()
-        # 替换此处代码
-        x = y = torch.randn(num_grid_per_dim_agent, num_grid_per_dim_agent).to("cuda")
-        
+        # 在 BEV 平面均匀铺网格作为 agent 参考点的锚点先验。
+        # 用 ceil 而非 int 截断：query 数不是完全平方数时，向上取整能保证
+        # 网格点数 >= query 数，配合后面 flatten()[:num_agent_query] 截断，
+        # 不会出现参考点不够分配的情况。
+        num_grid_per_dim_agent = int(np.ceil(np.sqrt(self.agent_reference_points.weight.shape[0])))
+        x = torch.linspace(self.pc_range[0], self.pc_range[3], steps=num_grid_per_dim_agent, device=self.agent_reference_points.weight.device)
+        y = torch.linspace(self.pc_range[1], self.pc_range[4], steps=num_grid_per_dim_agent, device=self.agent_reference_points.weight.device)
+        x, y = torch.meshgrid(x, y, indexing="xy")
+
         ###################################################################
         with torch.no_grad():
-            self.agent_reference_points.weight[..., 0] = x.flatten()
-            self.agent_reference_points.weight[..., 1] = y.flatten()
+            num_agent_query = self.agent_reference_points.weight.shape[0]
+            self.agent_reference_points.weight[..., 0] = x.flatten()[:num_agent_query]
+            self.agent_reference_points.weight[..., 1] = y.flatten()[:num_agent_query]
             self.agent_reference_points.weight[..., 2] = 0.0
         nn.init.constant_(self.agent_query.weight, 0)
         
@@ -572,11 +571,9 @@ class DriveTransformerlHead(BaseModule):
         # TODO-3 get agent_query and agent_reference_points from self.agent_query.weight and self.agent_reference_points.weight
         # agent_query = nn.Embedding.weight (N, D) -> (bs, N, D) .to(dtype)
         # agent_reference_points = nn.Embedding.weight (N, D) -> (bs, N, D)
-        # 替换此处代码
-        agent_query = torch.randn(bs, self.agent_query.shape[0], self.agent_query.shape[1]).to("cuda")
-        agent_reference_points = torch.randn(bs, self.agent_reference_points.shape[0], \
-                                             self.agent_reference_points.shape[1]).to("cuda")
-        
+        agent_query = self.agent_query.weight.unsqueeze(0).expand(bs, -1, -1).to(device=img_feats.device, dtype=dtype)
+        agent_reference_points = self.agent_reference_points.weight.unsqueeze(0).expand(bs, -1, -1).to(device=img_feats.device, dtype=dtype)
+
         ###################################################################
         ## Online Mapping
         ###################################################################

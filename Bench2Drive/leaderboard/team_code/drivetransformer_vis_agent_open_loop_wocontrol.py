@@ -860,8 +860,16 @@ class DriveTransformerAgent(autonomous_agent.AutonomousAgent):
         # project-1    
         # TODO-9 vis 3d bbox
         # project pts_4d to image2d using lidar2img_rt
-        # 替换此处代码
-        pts_2d = pts_4d
+        pts_2d = (lidar2img_rt @ pts_4d.T).T  # (num_bbox*8, 4)
+
+        # 透视除法：u = x/z, v = y/z
+        eps = 1e-5
+        valid = np.abs(pts_2d[:, 2]) > eps
+        pts_2d[valid, 0] /= pts_2d[valid, 2]
+        pts_2d[valid, 1] /= pts_2d[valid, 2]
+
+        # 无效深度点（位于相机平面或后方）设为大值，交由后续 mask 过滤，避免除零产生 inf/nan
+        pts_2d[~valid, 0:2] = 1e6
         ################################################
         imgfov_pts_2d = pts_2d[..., :2].reshape(num_bbox, 8, 2)
         depth = pts_2d[..., 2].reshape(num_bbox, 8)
