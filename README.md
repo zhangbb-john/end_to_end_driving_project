@@ -7,7 +7,7 @@
 三种用法，取决于你从哪个分支开始：
 
 - **自学**：从 `main` 出发，对着 lab 说明自己补全填空点，做完与对应的 solution 分支比对
-- **跑通验证**：直接用 `lab3-solution`，装好环境即可复现开环/闭环评测与可视化，适合验证环境或快速看效果（用官方预训练权重，不必自己训练）
+- **跑通验证**：两个选择——`lab3-solution` 用官方预训练权重，装好环境即可复现开环/闭环评测与可视化，是验证环境、快速看效果的最短路径；`lab4-solution` 代码填空全部完成，除推理外还含训练流程，想连训练一起验证时用它（需额外下载数据集、多卡、耗时以天计）
 - **教学**：把 `main` 作为起点分发，solution 分支作为参考实现
 
 ### 参考来源
@@ -23,13 +23,13 @@
 
 分支按实验顺序递进。`main` 是预留好填空点的基准工程，每个实验只改少量文件，后一个实验建立在前一个的结果之上，因此既可以顺着做下来，也可以直接切到任一 solution 分支看完整实现。
 
-| 分支 | 内容 |
-| --- | --- |
-| `main` | 初始基准工程，预留全部 TODO 填空点，动手做的起点 |
-| `lab1-solution` | main + Lab1 参考实现 + lab 报告（开环感知可视化） |
-| `lab2-solution` | 基于 lab1-solution，加入在线建图，产出带地图的可视化 |
-| `lab3-solution` | 基于 lab2-solution，加入 planner，产出闭环评测结果与可视化 |
-| `lab4-solution` | 基于 lab3-solution，自行训练权重并跑完整评测集，产出训练日志与评测分析 |
+| 分支 | 内容 | lab 说明 |
+| --- | --- | --- |
+| [`main`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/main) | 初始基准工程，预留全部 TODO 填空点，动手做的起点 | — |
+| [`lab1-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab1-solution) | main + Lab1 参考实现 + lab 报告（开环感知可视化） | [lab1](docs/requirement/lab1.md) |
+| [`lab2-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab2-solution) | 基于 lab1-solution，加入在线建图，产出带地图的可视化 | [lab2](docs/requirement/lab2.md) |
+| [`lab3-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab3-solution) | 基于 lab2-solution，加入 planner，产出闭环评测结果与可视化 | [lab3](docs/requirement/lab3.md) |
+| [`lab4-solution`](https://github.com/zhangbb-john/end_to_end_driving_project/tree/lab4-solution) | 基于 lab3-solution，自行训练权重并跑完整评测集，产出训练日志与评测分析 | [lab4](docs/requirement/lab4.md) |
 
 ### 实验安排
 
@@ -46,7 +46,7 @@ TODO-6（注意力掩码）前三个实验都要动：每个实验在前一个�
 
 Lab1~Lab3 用的是官方预训练权重，只验证推理链路是否正确；Lab4 才真正自己训练，因此对算力和时间的要求高得多（完整训练需多卡、耗时以天计），也是唯一需要下载 Bench2Drive 数据集的实验。
 
-各 lab 的说明与产出物要求：[lab1](docs/requirement/lab1.md) · [lab2](docs/requirement/lab2.md)。文档为课程原始要求的完整副本，其中的打包提交说明仅在教学场景下适用，自学或验证时跳过即可。
+各 lab 的说明见上表「lab 说明」一列。文档为课程原始要求的完整副本，其中的打包提交说明仅在教学场景下适用，自学或验证时跳过即可。
 
 ### 目录结构
 
@@ -68,8 +68,6 @@ end_to_end_driving_project/
 - `Bench2Drive/leaderboard/team_code/drivetransformer_vis_agent*.py` — Agent 主文件，模型加载、预处理、可视化，TODO-9
 
 ## 配置过程
-
-完整配置过程与踩坑记录参考 `/home/ubuntu/Projects/end_to_end_driving/notion.md`。
 
 ### 环境要求
 
@@ -137,14 +135,14 @@ bash adzoo/drivetransformer/dist_train.sh \
 
 ### auto dl使用
 
-在 AutoDL 云服务器上跑的完整指南参考 `/home/ubuntu/Projects/end_to_end_driving/notion.md` 的 AutoDL 章节，要点：
+没有本地显卡时可以租 AutoDL 实例。实例配置选 RTX 4090 + Ubuntu 22.04，Python 预选 3.8、CUDA 预选 11.8；代码和数据放 `/root/autodl-tmp`（系统盘空间不够）。
 
-- 实例配置选 RTX 4090 + Ubuntu 22.04，Python 预选 3.8、CUDA 预选 11.8
-- 本地 VSCode 装 **Remote - SSH** 插件，`Ctrl+Shift+P` → `Remote-SSH: Connect to Host` 连接实例
-- CARLA 拒绝以 root 运行，需先建普通用户并把 `/root/autodl-tmp` 权限放开
-- AutoDL 上用 `-RenderOffScreen` 需要先配好 Vulkan，否则报 `VK_ERROR_OUT_OF_HOST_MEMORY`
-- 遇到 `No module named 'mmcv._ext'`，说明扩展没编译，回到 `DriveTransformer/` 执行 `pip install -e .`
-- `libgomp: Invalid value for environment variable OMP_NUM_THREADS` → `export OMP_NUM_THREADS=1`
+本地 VSCode 装 **Remote - SSH** 插件，`Ctrl+Shift+P` → `Remote-SSH: Connect to Host` 填实例给的 ssh 命令即可连上。连上后先验证环境：
+
+```bash
+nvidia-smi
+python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+```
 
 JupyterLab 走 SSH 隧道访问：
 
@@ -157,3 +155,49 @@ jupyter lab --no-browser --allow-root --port=8889
 ```
 
 ![JupyterLab 界面](docs/readme_asset/jupyter_lab.png)
+
+#### 常见问题
+
+**`CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'`**
+
+```bash
+source /root/miniconda3/etc/profile.d/conda.sh
+```
+
+**`carla: Refusing to run with the root privileges`** —— CARLA 不能以 root 启动，需建普通用户并放开权限：
+
+```bash
+useradd -m -s /bin/bash ubuntu
+passwd ubuntu
+chmod 755 /root                       # 必须，否则新用户读不到 conda
+chmod 777 -R /root/autodl-tmp
+echo ". /root/miniconda3/etc/profile.d/conda.sh" >> /home/ubuntu/.bashrc
+su - ubuntu
+```
+
+**CARLA 直接启动失败 / `VK_ERROR_OUT_OF_HOST_MEMORY`** —— 云实例无物理显示器，用 Xvfb 造一个虚拟显示：
+
+```bash
+sudo apt update && sudo apt install -y xvfb
+Xvfb :99 -screen 0 1024x768x24 &
+export DISPLAY=:99
+cd $CARLA_ROOT && ./CarlaUE4.sh -RenderOffScreen -nosound -benchmark -fps=10
+# 验证
+ps -ef | grep CarlaUE4 | grep -v grep
+```
+
+**`No module named 'mmcv._ext'`** —— 扩展没编译。回到 `DriveTransformer/` 执行 `pip install -v -e .`，注意用的必须是 conda 环境里那个 python（`python -c "import sys; print(sys.executable)"` 核对）。
+
+**`libgomp: Invalid value for environment variable OMP_NUM_THREADS`**
+
+```bash
+export OMP_NUM_THREADS=1
+```
+
+**`LowLevelFatalError: bind: Address already in use`** —— 上一次的 CARLA 或评测进程没退干净：
+
+```bash
+ps -ef | grep -E "Carla|python" | grep -v grep   # 找到后 kill
+```
+
+**`ERROR: unable to parse the OpenDRIVE XML string`** —— 伴随 `failed to generate map` 与 `Aborted (core dumped)`，发生在 Loading the world 阶段。原因是地图文件传输不完整（如 `CarlaUE4/Content/Carla/Maps/Town13/OpenDrive/Town13.xodr` 截断），重新传输该 `.xodr` 并核对大小。
