@@ -15,7 +15,7 @@
 
 一段式端到端被普遍视为量产自动驾驶的演进方向，近两年头部车企与智驾厂商也在陆续转向这条路线。理解一段式模型怎么设计、怎么训练、怎么在闭环中评测，是进入这个方向的基础。
 
-### 为什么是 DriveTransformer
+### DriveTransformer 简介
 
 [DriveTransformer](https://arxiv.org/abs/2503.07656)（ICLR 2025，上海交通大学 Thinklab）是一段式端到端模型。和 UniAD 这类按「感知 → 预测 → 规划」串行堆叠的设计不同，它用一个统一的 Transformer 同时处理所有任务，核心是三点：
 
