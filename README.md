@@ -19,13 +19,28 @@
 
 ### DriveTransformer 简介
 
-[DriveTransformer](https://arxiv.org/abs/2503.07656)（ICLR 2025，上海交通大学 Thinklab）是一段式端到端模型。和 UniAD 这类按「感知 → 预测 → 规划」串行堆叠的设计不同，它用一个统一的 Transformer 同时处理所有任务，核心是三点：
+![DriveTransformer 整体架构](docs/readme_asset/drivetransformer_arch.png)
+
+<sub>图片引自 Xiaosong Jia, Junqi You, Zhiyuan Zhang, Junchi Yan. *DriveTransformer: Unified Transformer for Scalable End-to-End Autonomous Driving*. ICLR 2025（[arXiv:2503.07656](https://arxiv.org/abs/2503.07656)），版权归原作者所有。</sub>
+
+[DriveTransformer](https://arxiv.org/abs/2503.07656) 由上海交通大学 [Thinklab](https://github.com/Thinklab-SJTU) 的 Xiaosong Jia、Junqi You、Zhiyuan Zhang、Junchi Yan 提出，发表于 ICLR 2025，并开源了[完整代码与权重](https://github.com/Thinklab-SJTU/DriveTransformer)。它是一段式端到端模型，和 UniAD 这类按「感知 → 预测 → 规划」串行堆叠的设计不同，它用一个统一的 Transformer 同时处理所有任务，核心是三点：
 
 - **任务并行**：检测、建图、规划三类 query 在每一层 decoder 里同时交互，而不是上一个任务做完再交给下一个，靠注意力掩码控制谁能看到谁
 - **稀疏表征**：query 直接与多视角图像特征做交叉注意力，不构建稠密的 BEV 特征图，计算更省、更易扩展
 - **流式处理**：用历史 query 组成的时序记忆传递时间信息，适合在线连续推理
 
 结构简洁、易于放大，同时在 Bench2Drive 闭环评测上表现出色，因此很适合作为学习一段式端到端的切入点：本工程的四个实验正好对应它的感知、建图、规划三类 query 以及完整训练流程。
+
+本工程的实验建立在 DriveTransformer 原作者开源的工作之上，感谢他们公开论文、代码与预训练权重。如果本工程对你有帮助，也请引用原论文：
+
+```bibtex
+@inproceedings{jia2025drivetransformer,
+  title={DriveTransformer: Unified Transformer for Scalable End-to-End Autonomous Driving},
+  author={Xiaosong Jia and Junqi You and Zhiyuan Zhang and Junchi Yan},
+  booktitle={International Conference on Learning Representations (ICLR)},
+  year={2025}
+}
+```
 
 三种用法，取决于你从哪个分支开始：
 
