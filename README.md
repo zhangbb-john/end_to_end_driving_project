@@ -1,5 +1,7 @@
 # end_to_end_driving_project
 
+![DriveTransformer 闭环驾驶 demo（Town12 MergerIntoSlowTraffic，DS=100）](docs/readme_asset/closed_loop_demo.gif)
+
 ## 项目介绍
 
 端到端自动驾驶实验工程。以 [DriveTransformer](https://github.com/Thinklab-SJTU/DriveTransformer) 为基座，拆成四个递进式实验：先补全动态目标感知、在线建图、规划三部分并在 CARLA 仿真环境中完成推理与可视化，最后自行训练权重跑完整闭环评测。
